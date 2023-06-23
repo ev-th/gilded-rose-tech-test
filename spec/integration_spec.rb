@@ -9,8 +9,10 @@ describe 'integration' do
   let(:aged_brie) { Item.new('Aged Brie', 20, 49) }
   let(:sulfuras) { Item.new('Sulfuras, Hand of Ragnaros', 30, 40) }
   let(:backstage_pass) { Item.new('Backstage passes to a TAFKAL80ETC concert', 11, 13) }
-  let(:valuable_pass) { Item.new('Backstage passes to a TAFKAL80ETC concert', 5, 30) }
+  let(:valuable_pass) { Item.new('Backstage passes to a TAFKAL80ETC concert', 5, 48) }
   let(:today_pass) { Item.new('Backstage passes to a TAFKAL80ETC concert', 0, 40) }
+  let(:pass_49_quality) { Item.new('Backstage passes to a TAFKAL80ETC concert', 7, 49) }
+  let(:pass_48_quality) { Item.new('Backstage passes to a TAFKAL80ETC concert', 3, 48) }
 
   describe 'GildedRose#update_quality' do
     context 'for standard items' do
@@ -73,7 +75,7 @@ describe 'integration' do
       it 'increases in quality by 3 when sell_in is less than 6 days' do
         gilded_rose = GildedRose.new([valuable_pass])
         gilded_rose.update_quality
-        expect(valuable_pass.to_s).to eq 'Backstage passes to a TAFKAL80ETC concert, 4, 33'
+        expect(valuable_pass.to_s).to eq 'Backstage passes to a TAFKAL80ETC concert, 4, 50'
       end
 
       it 'reduces quality to 0 when sell_by reduces to 0' do
@@ -81,6 +83,37 @@ describe 'integration' do
         gilded_rose.update_quality
         expect(today_pass.to_s).to eq 'Backstage passes to a TAFKAL80ETC concert, -1, 0'
       end
+
+      it 'cannot increase quality above 50' do
+        gilded_rose = GildedRose.new([valuable_pass])
+        gilded_rose.update_quality
+        gilded_rose.update_quality
+        expect(valuable_pass.to_s).to eq 'Backstage passes to a TAFKAL80ETC concert, 3, 50'
+      end
+
+      it 'if quality tries to increase by 2 from 49, it will stop at 50' do
+        gilded_rose = GildedRose.new([pass_49_quality])
+        gilded_rose.update_quality
+        expect(pass_49_quality.to_s).to eq 'Backstage passes to a TAFKAL80ETC concert, 6, 50'
+      end
+
+      it 'if quality tries to increase by 3 from 48, it will stop at 50' do
+        gilded_rose = GildedRose.new([pass_48_quality])
+        gilded_rose.update_quality
+        expect(pass_48_quality.to_s).to eq 'Backstage passes to a TAFKAL80ETC concert, 2, 50'
+      end
+    end
+
+    it 'updates all the products in the items list' do
+      gilded_rose = GildedRose.new(
+        [standard_item, aged_brie, sulfuras, backstage_pass]
+      )
+      gilded_rose.update_quality
+
+      expect(standard_item.to_s).to eq 'standard_item, 9, 19'
+      expect(aged_brie.to_s).to eq 'Aged Brie, 19, 50'
+      expect(sulfuras.to_s).to eq 'Sulfuras, Hand of Ragnaros, 30, 40'
+      expect(backstage_pass.to_s).to eq 'Backstage passes to a TAFKAL80ETC concert, 10, 14'
     end
   end
 end
