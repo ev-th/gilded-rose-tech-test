@@ -6,6 +6,7 @@ describe 'integration' do
   let(:old_item) { Item.new('old_item', 0, 15) }
   let(:garbage_item) { Item.new('garbage_item', 10, 0) }
   let(:quality_item) { Item.new('quality_item', 10, 51) }
+  let(:aged_brie) { Item.new('Aged Brie', 20, 49) }
 
   describe 'GildedRose#update_quality' do
     context 'for standard items' do
@@ -27,13 +28,27 @@ describe 'integration' do
         expect(garbage_item.to_s).to eq 'garbage_item, 9, 0'
       end
     end
+    
+    context "For 'Aged Brie'" do
+      it 'increases quality by 1 and decreases sell_by by 1' do
+        gilded_rose = GildedRose.new([aged_brie])
+        gilded_rose.update_quality
+        expect(aged_brie.to_s).to eq 'Aged Brie, 19, 50'
+      end
+
+      it 'cannot increase quality above 50' do
+        gilded_rose = GildedRose.new([aged_brie])
+        gilded_rose.update_quality
+        gilded_rose.update_quality
+        expect(aged_brie.to_s).to eq 'Aged Brie, 18, 50'
+      end
+    end
   end
 end
 
 
 # Once the sell by date has passed, Quality degrades twice as fast
 # The Quality of an item is never negative
-# “Aged Brie” actually increases in Quality the older it gets
 # The Quality of an item is never more than 50
 # “Sulfuras”, being a legendary item, never has to be sold or decreases in Quality
 # “Backstage passes”, like aged brie, increases in Quality as it’s SellIn value approaches; Quality increases by 2 when there are 10 days or less and by 3 when there are 5 days or less but Quality drops to 0 after the concert
