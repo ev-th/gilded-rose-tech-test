@@ -1,6 +1,6 @@
 require_relative 'item_updater'
 
-class SpecialItemQualityUpdater < ItemUpdater
+class AgedBrieUpdater < ItemUpdater
   def update_sell_by(item)
     # Standard, Brie and Backstage pass: Reduce sell by
     if item.name != "Sulfuras, Hand of Ragnaros"
