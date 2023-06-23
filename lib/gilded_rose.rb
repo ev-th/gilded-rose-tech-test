@@ -1,10 +1,10 @@
-require 'quality_updater'
+require 'item_updater'
 require 'special_item_quality_updater'
 
 class GildedRose
   def initialize(items)
     @items = items
-    @updater = QualityUpdater.new
+    @updater = ItemUpdater.new
     @special_updater = SpecialItemQualityUpdater.new
     @special_items = [
       'Sulfuras, Hand of Ragnaros',

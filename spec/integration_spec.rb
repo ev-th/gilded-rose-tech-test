@@ -4,7 +4,7 @@ require 'item'
 describe 'integration' do
   let(:standard_item) { Item.new('standard_item', 10, 20) }
   let(:old_item) { Item.new('old_item', 0, 15) }
-  let(:garbage_item) { Item.new('garbage_item', 10, 0) }
+  let(:garbage_item) { Item.new('garbage_item', -1, 1) }
   let(:quality_item) { Item.new('quality_item', 10, 51) }
   let(:aged_brie) { Item.new('Aged Brie', 20, 49) }
   let(:sulfuras) { Item.new('Sulfuras, Hand of Ragnaros', 30, 40) }
@@ -31,7 +31,7 @@ describe 'integration' do
       it 'never reduces quality past 0' do
         gilded_rose = GildedRose.new([garbage_item])
         gilded_rose.update_quality
-        expect(garbage_item.to_s).to eq 'garbage_item, 9, 0'
+        expect(garbage_item.to_s).to eq 'garbage_item, -2, 0'
       end
     end
     
