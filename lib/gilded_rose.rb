@@ -16,9 +16,11 @@ class GildedRose
   def update_quality()
     @items.each do |item|
       if @special_items.include?(item.name)
-        @special_updater.update_item(item)
+        @special_updater.update_quality(item)
+        @special_updater.update_sell_by(item)
       else
-        @updater.update_item(item)
+        @updater.update_quality(item)
+        @updater.update_sell_by(item)
       end
     end
   end

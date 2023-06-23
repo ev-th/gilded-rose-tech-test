@@ -1,10 +1,7 @@
-class SpecialItemQualityUpdater
-  def update_item(item)
-    update_item_quality(item)
-    update_item_sell_by(item)
-  end
+require_relative 'item_updater'
 
-  def update_item_sell_by(item)
+class SpecialItemQualityUpdater < ItemUpdater
+  def update_sell_by(item)
     # Standard, Brie and Backstage pass: Reduce sell by
     if item.name != "Sulfuras, Hand of Ragnaros"
       item.sell_in = item.sell_in - 1
@@ -37,7 +34,7 @@ class SpecialItemQualityUpdater
     end
   end
 
-  def update_item_quality(item)
+  def update_quality(item)
     # Standard items and Sulfuras
     if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
       if item.quality > 0
