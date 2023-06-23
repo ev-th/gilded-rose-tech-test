@@ -7,6 +7,10 @@ describe 'integration' do
   let(:garbage_item) { Item.new('garbage_item', 10, 0) }
   let(:quality_item) { Item.new('quality_item', 10, 51) }
   let(:aged_brie) { Item.new('Aged Brie', 20, 49) }
+  let(:sulfuras) { Item.new('Sulfuras, Hand of Ragnaros', 30, 40) }
+  let(:backstage_pass) { Item.new('Backstage passes to a TAFKAL80ETC concert', 11, 13) }
+  let(:valuable_pass) { Item.new('Backstage passes to a TAFKAL80ETC concert', 5, 30) }
+  let(:today_pass) { Item.new('Backstage passes to a TAFKAL80ETC concert', 0, 40) }
 
   describe 'GildedRose#update_quality' do
     context 'for standard items' do
@@ -43,12 +47,40 @@ describe 'integration' do
         expect(aged_brie.to_s).to eq 'Aged Brie, 18, 50'
       end
     end
+    
+    context "For 'Sulfuras'" do
+      it 'never decreases quality or sell by' do
+        gilded_rose = GildedRose.new([sulfuras])
+        gilded_rose.update_quality
+        expect(sulfuras.to_s).to eq 'Sulfuras, Hand of Ragnaros, 30, 40'
+      end
+    end
+    
+    context 'For Backstage passes' do
+      it 'increases in quality by 1 when sell_in is more than 10 days' do
+        gilded_rose = GildedRose.new([backstage_pass])
+        gilded_rose.update_quality
+        expect(backstage_pass.to_s).to eq 'Backstage passes to a TAFKAL80ETC concert, 10, 14'
+      end
+
+      it 'increases in quality by 2 when sell_in is less than 11 days' do
+        gilded_rose = GildedRose.new([backstage_pass])
+        gilded_rose.update_quality
+        gilded_rose.update_quality
+        expect(backstage_pass.to_s).to eq 'Backstage passes to a TAFKAL80ETC concert, 9, 16'
+      end
+
+      it 'increases in quality by 3 when sell_in is less than 6 days' do
+        gilded_rose = GildedRose.new([valuable_pass])
+        gilded_rose.update_quality
+        expect(valuable_pass.to_s).to eq 'Backstage passes to a TAFKAL80ETC concert, 4, 33'
+      end
+
+      it 'reduces quality to 0 when sell_by reduces to 0' do
+        gilded_rose = GildedRose.new([today_pass])
+        gilded_rose.update_quality
+        expect(today_pass.to_s).to eq 'Backstage passes to a TAFKAL80ETC concert, -1, 0'
+      end
+    end
   end
 end
-
-
-# Once the sell by date has passed, Quality degrades twice as fast
-# The Quality of an item is never negative
-# The Quality of an item is never more than 50
-# “Sulfuras”, being a legendary item, never has to be sold or decreases in Quality
-# “Backstage passes”, like aged brie, increases in Quality as it’s SellIn value approaches; Quality increases by 2 when there are 10 days or less and by 3 when there are 5 days or less but Quality drops to 0 after the concert
