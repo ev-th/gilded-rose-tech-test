@@ -1,14 +1,17 @@
-require 'updaters'
+require 'updater_repo'
 
 class GildedRose
-  def initialize(items, updaters = Updaters.new)
+  def initialize(items, updaters = UpdaterRepo)
     @items = items
-    @standard_updater = updaters.default_updater
-    @special_updaters = updaters.special_updaters
+    @standard_updater = updaters.default
+    @special_updaters = updaters.special
   end
 
   def update_quality()
-    @items.each { |item| update_item(item, select_updater(item)) }
+    @items.each do |item|
+      updater = select_updater(item)
+      update_item(item, updater) 
+    end
   end
   
   def select_updater(item)
