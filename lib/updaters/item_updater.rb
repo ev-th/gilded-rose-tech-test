@@ -1,6 +1,6 @@
 class ItemUpdater
-  def update_sell_by(item)
-    item.sell_in = item.sell_in - 1
+  def update_sell_in(item)
+    item.sell_in -= 1
   end
   
   def update_quality(item)
@@ -8,7 +8,9 @@ class ItemUpdater
     reduce_quality(item) if item.sell_in <= 0
   end
 
+  private
+
   def reduce_quality(item)
-    item.quality = item.quality - 1 if item.quality > 0
+    item.quality -= 1 if item.quality > 0
   end
 end

@@ -20,6 +20,6 @@ class GildedRose
 
   def update_item(item, updater)
     updater.update_quality(item)
-    updater.update_sell_by(item)
+    updater.update_sell_in(item)
   end
 end
