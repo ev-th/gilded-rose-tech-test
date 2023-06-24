@@ -104,6 +104,33 @@ describe 'integration' do
       end
     end
 
+    context 'for Conjured Item' do
+      context 'when not out of date' do
+        it 'reduces sell_by by 1 and quality by 2' do
+          conjured_item = Item.new('Conjured Item', 5, 15)
+          gilded_rose = GildedRose.new([conjured_item])
+          gilded_rose.update_quality
+          expect(conjured_item.to_s).to eq 'Conjured Item, 4, 13'
+        end 
+      end
+
+      context 'when out of date' do
+        it 'reduces sell_by by 1 and quality by 4' do
+          conjured_item = Item.new('Conjured Item', -2, 15)
+          gilded_rose = GildedRose.new([conjured_item])
+          gilded_rose.update_quality
+          expect(conjured_item.to_s).to eq 'Conjured Item, -3, 11'
+        end 
+      end
+      
+      it 'will not reduct quality below 0' do
+        conjured_item = Item.new('Conjured Item', -2, 3)
+        gilded_rose = GildedRose.new([conjured_item])
+        gilded_rose.update_quality
+        expect(conjured_item.to_s).to eq 'Conjured Item, -3, 0'
+      end
+    end
+
     it 'updates all the products in the items list' do
       gilded_rose = GildedRose.new(
         [standard_item, aged_brie, sulfuras, backstage_pass]
