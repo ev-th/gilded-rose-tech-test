@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'updater_repo'
+require 'updaters'
 
 class GildedRose
-  def initialize(items, updater_repo = UpdaterRepo)
+  def initialize(items, updaters = UPDATERS)
     @items = items
-    @updaters = updater_repo.updaters
+    @updaters = updaters
   end
 
   def update_quality

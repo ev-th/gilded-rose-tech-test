@@ -6,15 +6,11 @@ describe GildedRose do
   it "gets an item's corresponding Updater and uses it to update the item" do
     updater = double :updater, update_item: nil
     item = double :item, name: 'special_item'
+    updaters = {
+      'special_item' => updater
+    }
 
-    fake_repo = double :fake_repo
-    allow(fake_repo).to receive(:updaters).and_return(
-      {
-        'special_item' => updater
-      }
-    )
-
-    gilded_rose = GildedRose.new([item], fake_repo)
+    gilded_rose = GildedRose.new([item], updaters)
 
     expect(updater).to receive(:update_item).with(item)
 
@@ -31,16 +27,13 @@ describe GildedRose do
     item3 = double :item, name: 'item3'
     items = [item1, item2, item3]
 
-    fake_repo = double :fake_repo
-    allow(fake_repo).to receive(:updaters).and_return(
-      {
+    updaters = {
         'item1' => updater1,
         'item2' => updater2,
         'item3' => updater3
       }
-    )
 
-    gilded_rose = GildedRose.new(items, fake_repo)
+    gilded_rose = GildedRose.new(items, updaters)
 
     expect(updater1).to receive(:update_item).with(item1)
     expect(updater2).to receive(:update_item).with(item2)
