@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'updaters/item_updater'
 require 'updaters/aged_brie_updater'
 require 'updaters/sulfuras_updater'

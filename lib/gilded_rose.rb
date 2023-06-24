@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'updater_repo'
 
 class GildedRose
@@ -6,7 +8,7 @@ class GildedRose
     @updaters = updater_repo.updaters
   end
 
-  def update_quality()
+  def update_quality
     @items.each do |item|
       updater = @updaters[item.name]
       updater.update_item(item)

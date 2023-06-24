@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 require 'updaters/backstage_pass_updater'
 require 'item'
 
 describe BackstagePassUpdater do
   let(:updater) { described_class.new }
-  
+
   describe '#update_sell_in' do
     it "reduces item's sell_in by 1" do
       item = Item.new('item', 3, 5)
-      updater.update_sell_in(item)  
+      updater.update_sell_in(item)
 
       expect(item.sell_in).to eq 2
     end
@@ -22,7 +24,7 @@ describe BackstagePassUpdater do
         expect(item.quality).to eq 14
       end
     end
-    
+
     context 'when the sell_in of the item is 10' do
       it 'increases the quality of the item by 2' do
         item = Item.new('item', 10, 13)

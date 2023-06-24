@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'gilded_rose'
 require 'item'
 
@@ -10,14 +12,14 @@ describe 'integration' do
         gilded_rose.update_quality
         expect(item.to_s).to eq 'standard_item, 9, 19'
       end
-      
+
       it 'reduces quality twice as fast once sell by date is passed' do
         item = Item.new('old_item', 0, 15)
         gilded_rose = GildedRose.new([item])
         gilded_rose.update_quality
         expect(item.to_s).to eq 'old_item, -1, 13'
       end
-      
+
       it 'never reduces quality past 0' do
         item = Item.new('garbage_item', -1, 1)
         gilded_rose = GildedRose.new([item])
@@ -25,7 +27,7 @@ describe 'integration' do
         expect(item.to_s).to eq 'garbage_item, -2, 0'
       end
     end
-    
+
     context "For 'Aged Brie'" do
       let(:item) { Item.new('Aged Brie', 20, 49) }
 
@@ -43,7 +45,7 @@ describe 'integration' do
         expect(item.to_s).to eq 'Aged Brie, 18, 50'
       end
     end
-    
+
     context "For 'Sulfuras'" do
       it 'never decreases quality or sell by' do
         item = Item.new('Sulfuras, Hand of Ragnaros', 30, 40)
@@ -52,7 +54,7 @@ describe 'integration' do
         expect(item.to_s).to eq 'Sulfuras, Hand of Ragnaros, 30, 40'
       end
     end
-    
+
     context 'For Backstage passes' do
       let(:backstage_pass) { Item.new('Backstage passes to a TAFKAL80ETC concert', 11, 13) }
       let(:valuable_pass) { Item.new('Backstage passes to a TAFKAL80ETC concert', 5, 48) }
@@ -112,7 +114,7 @@ describe 'integration' do
           gilded_rose = GildedRose.new([conjured_item])
           gilded_rose.update_quality
           expect(conjured_item.to_s).to eq 'Conjured Item, 4, 13'
-        end 
+        end
       end
 
       context 'when out of date' do
@@ -121,9 +123,9 @@ describe 'integration' do
           gilded_rose = GildedRose.new([conjured_item])
           gilded_rose.update_quality
           expect(conjured_item.to_s).to eq 'Conjured Item, -3, 11'
-        end 
+        end
       end
-      
+
       it 'will not reduct quality below 0' do
         conjured_item = Item.new('Conjured Item', -2, 3)
         gilded_rose = GildedRose.new([conjured_item])

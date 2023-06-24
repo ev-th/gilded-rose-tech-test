@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'gilded_rose'
 
 describe GildedRose do
   it "gets an item's corresponding Updater and uses it to update the item" do
     updater = double :updater, update_item: nil
     item = double :item, name: 'special_item'
-    
+
     fake_repo = double :fake_repo
     allow(fake_repo).to receive(:updaters).and_return(
       {
@@ -18,8 +20,8 @@ describe GildedRose do
 
     gilded_rose.update_quality
   end
-  
-  it "updates all items with their corresponding updater" do
+
+  it 'updates all items with their corresponding updater' do
     updater1 = double :updater1, update_item: nil
     updater2 = double :updater2, update_item: nil
     updater3 = double :updater3, update_item: nil
@@ -28,7 +30,7 @@ describe GildedRose do
     item2 = double :item, name: 'item2'
     item3 = double :item, name: 'item3'
     items = [item1, item2, item3]
-    
+
     fake_repo = double :fake_repo
     allow(fake_repo).to receive(:updaters).and_return(
       {
