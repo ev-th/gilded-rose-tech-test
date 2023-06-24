@@ -1,7 +1,7 @@
-require 'item_updater'
-require 'aged_brie_updater'
-require 'sulfuras_updater'
-require 'backstage_pass_updater'
+require 'updaters/item_updater'
+require 'updaters/aged_brie_updater'
+require 'updaters/sulfuras_updater'
+require 'updaters/backstage_pass_updater'
 
 class UpdaterRepo
   @@default_updater = ItemUpdater.new
