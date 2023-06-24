@@ -3,6 +3,7 @@ require 'item'
 
 describe ItemUpdater do
   let(:updater) { described_class.new }
+  
   describe '#update_sell_in' do
     it "reduces item's sell_in by 1" do
       item = Item.new('item', 3, 5)
@@ -40,7 +41,7 @@ describe ItemUpdater do
       it 'does not reduce the quality past 0' do
         item = Item.new('item', 4, 0)  
         updater.update_quality(item)
-        
+
         expect(item.quality).to eq 0   
       end
     end
