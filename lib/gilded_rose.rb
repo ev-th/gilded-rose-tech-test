@@ -1,17 +1,10 @@
-require 'item_updater'
-require 'aged_brie_updater'
-require 'sulfuras_updater'
-require 'backstage_pass_updater'
+require 'updaters'
 
 class GildedRose
-  def initialize(items)
+  def initialize(items, updaters = Updaters.new)
     @items = items
-    @standard_updater = ItemUpdater.new
-    @special_updaters = {
-      'Sulfuras, Hand of Ragnaros' => SulfurasUpdater.new,
-      'Backstage passes to a TAFKAL80ETC concert' => BackstagePassUpdater.new,
-      'Aged Brie' => AgedBrieUpdater.new
-    }
+    @standard_updater = updaters.default_updater
+    @special_updaters = updaters.special_updaters
   end
 
   def update_quality()
