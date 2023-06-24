@@ -7,19 +7,13 @@ class GildedRose
     @special_updaters = updaters.special
   end
 
-  def update_quality()
-    @items.each do |item|
-      updater = select_updater(item)
-      update_item(item, updater) 
-    end
+  def update_quality
+    @items.each { |item| select_updater(item).update_item(item) }
   end
+
+  private
   
   def select_updater(item)
     @special_updaters.fetch(item.name, @standard_updater)
-  end
-
-  def update_item(item, updater)
-    updater.update_quality(item)
-    updater.update_sell_in(item)
   end
 end

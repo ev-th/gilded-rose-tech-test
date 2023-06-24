@@ -1,4 +1,9 @@
 class ItemUpdater
+  def update_item(item)
+    update_quality(item)
+    update_sell_in(item)
+  end
+
   def update_sell_in(item)
     item.sell_in -= 1
   end
