@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'updaters'
+require_relative 'updaters'
 
 class GildedRose
   def initialize(items, updaters = UPDATERS)

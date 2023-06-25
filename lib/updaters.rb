@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'updaters/item_updater'
-require 'updaters/aged_brie_updater'
-require 'updaters/sulfuras_updater'
-require 'updaters/backstage_pass_updater'
-require 'updaters/conjured_item_updater'
+require_relative 'updaters/item_updater'
+require_relative 'updaters/aged_brie_updater'
+require_relative 'updaters/sulfuras_updater'
+require_relative 'updaters/backstage_pass_updater'
+require_relative 'updaters/conjured_item_updater'
 
 UPDATERS = Hash.new(ItemUpdater.new).merge(
   {
