@@ -47,7 +47,22 @@ You can expand the program by adding your own custom rules.
 2. Include a new #update_sell_in method and/or #update_quality method to change the way the items are updated as one day passes.
 3. In lib/updaters.rb import your custom updater class and add it to the UPDATERS hash. For the key, use the name of the item that will use that updater.
 
+## Approach
+### Plan
+The original code was all in one method in a lot of nested if/else statements. At this stage, it was very difficult to understand how the code worked. Without extensive refactoring, it would be difficult to add new features. I didn't want to break the code, so I knew I had to start with writing tests that I could keep running while refactoring. Starting as unit tests, I planned to write them as integration tests since I knew I would be extracting classes as I went. Beyond this, I wasn't sure how I would refactor the code as I wasn't sure exactly what it was doing at this stage.
 
+### Refactor
+
+1. In order to start refactoring, I wrote a suite of integration tests that tested all the rules in the specification, that passed with the original code.
+2. I broke down the update_quality method into sections and added comments to work out how it was working. The method had two parts, updating both sell_in and quality, so I broke these into two methods. I then extracted this logic into its own Updater class leaving GildedRose to loop through the items and use the updater on each item.
+3. I now decided that the logic for different types of items was too intertwined, and they needed to be extracted into their own classes. I duplicated Updater for each item with custom rules, and refactored GildedRose to use the correct updater for each item.
+4. I rewrote the updater for standard items first. This would be the base class that defined the API for an updater. Then I refactored all the other updaters to inherit the standard updater, and provide changes to the methods following their rules.
+5. GildedRose now had some new if/else logic for selecting the updaters. I refactored this into a hash using item name keys and updater values. Then I extracted this hash into a different file, that is passed by default into GildedRose at construction. This new file also handled importing all the updaters.
+6. The main refactor was now complete. However, the program only had integration tests. Therefore I went back through the files and added unit tests. I could now add extra features.
+
+### Writing
+
+After the refactor, adding new rules for conjured items was straightforward. Following TDD, I wrote a new updater inheriting from ItemUpdater with any changes to the standard item rules, imported it into the updaters file and added it to the hash. GildedRose could now update conjured items.
 
 The following is copied from the README of the original tech test specifications:
 
